@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: mobiauto
+  data:
+    mongodb:
+      uri: mongodb://root:secret@mongo:27017/mobiauto?authSource=admin
+#    redis:
+#      host: redis
+#      port: 6379
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+    jwt:
+      secret: 3dedefa8ff4f4710d8028bc6b29ecff10ffe0c4e67c6d9445fb870bdbaf5be1bf451f2a6d2cbb324d0b9c66cb981cc16aa1fb231650cee436addc6005b8bb3764939cc9f466aad07aef9cb6e946a4d21b90f7cf2531c016856ce3054c6935a03a3f9415e53439b3de38dc6c1cb1d733cd4f109f8f45bbeb4369c4d6b1ba2247523faf25c9336b6d504157bdc9da4ce16aa9b90d8ca9fa299e7f0f2d346cbffff412710030eb72a984064e4f0ff2835adc7fb9710af28fb8719617283b5aefa8826b9d7170be82daed6726d694f206c5a2904ffdd13b4006e844ef3a5170b5bb15de6663e7e3e74ebc04714dfc69ec35803a6d81200bddc577f151604be0f5e09

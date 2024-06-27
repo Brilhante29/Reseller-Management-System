@@ -1,4 +1,4 @@
-package com.br.mobiauto.models.enums;
+package com.br.mobiauto.modules.users.models.enums;
 
 public enum Role {
     OWNER,

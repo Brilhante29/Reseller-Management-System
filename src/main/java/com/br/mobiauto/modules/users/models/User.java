@@ -1,11 +1,17 @@
-package com.br.mobiauto.models;
+package com.br.mobiauto.modules.users.models;
 
-import com.br.mobiauto.models.enums.Role;
+import com.br.mobiauto.modules.users.models.enums.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "users")
 public class User {
     @Id

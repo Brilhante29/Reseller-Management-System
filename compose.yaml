@@ -1,13 +1,25 @@
+version: '3.8'
 services:
   mongodb:
     image: 'mongo:latest'
+    container_name: mongo
     environment:
-      - 'MONGO_INITDB_DATABASE=mydatabase'
-      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
-      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      MONGO_INITDB_DATABASE: mobiauto
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
     ports:
-      - '27017'
-  redis:
-    image: 'redis:latest'
-    ports:
-      - '6379'
+      - '27017:27017'
+    networks:
+      - mobiauto-network
+
+#  redis:
+#    image: 'redis:alpine'
+#    container_name: redis
+#    ports:
+#      - '6379:6379'
+#    networks:
+#      - mobiauto-network
+
+networks:
+  mobiauto-network:
+    driver: bridge
