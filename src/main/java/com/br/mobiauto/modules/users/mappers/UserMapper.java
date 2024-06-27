@@ -7,13 +7,13 @@ import org.modelmapper.ModelMapper;
 
 public class UserMapper {
 
+    private static final ModelMapper modelMapper = new ModelMapper();
+
     public static UserResponseDTO toUserResponseDTO(User user) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(user, UserResponseDTO.class);
     }
 
     public static User toUserEntity(UserRequestDTO userRequestDTO) {
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(userRequestDTO, User.class);
     }
 }

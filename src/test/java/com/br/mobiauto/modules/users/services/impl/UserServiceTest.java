@@ -2,8 +2,11 @@ package com.br.mobiauto.modules.users.services.impl;
 
 import com.br.mobiauto.exceptions.ConflictException;
 import com.br.mobiauto.exceptions.NotFoundException;
+import com.br.mobiauto.modules.dealerships.models.Dealership;
+import com.br.mobiauto.modules.dealerships.repositories.DealershipRepository;
 import com.br.mobiauto.modules.users.dtos.UserRequestDTO;
 import com.br.mobiauto.modules.users.dtos.UserResponseDTO;
+import com.br.mobiauto.modules.users.mappers.UserMapper;
 import com.br.mobiauto.modules.users.models.User;
 import com.br.mobiauto.modules.users.models.enums.Role;
 import com.br.mobiauto.modules.users.repositories.UserRepository;
@@ -28,6 +31,9 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Mock
+    private DealershipRepository dealershipRepository;
+
+    @Mock
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
@@ -35,14 +41,22 @@ public class UserServiceTest {
 
     private UserRequestDTO userRequestDTO;
     private User user;
+    private Dealership dealership;
 
     @BeforeEach
     void setUp() {
+        dealership = Dealership.builder()
+                .id("dealership-id")
+                .cnpj("12.345.678/0001-90")
+                .corporateName("Dealership Name")
+                .build();
+
         userRequestDTO = UserRequestDTO.builder()
                 .name("John Doe")
                 .email("john.doe@example.com")
                 .password("password123")
                 .role(Role.MANAGER)
+                .dealershipId(dealership.getId())
                 .build();
 
         user = User.builder()
@@ -51,6 +65,7 @@ public class UserServiceTest {
                 .email("john.doe@example.com")
                 .password("encodedPassword")
                 .role(Role.ADMIN)
+                .dealership(dealership)
                 .build();
     }
 
@@ -75,8 +90,12 @@ public class UserServiceTest {
     @Test
     void testSaveUser_Success() {
         when(userRepository.findByEmail("john.doe@example.com")).thenReturn(null);
+        when(dealershipRepository.findById("dealership-id")).thenReturn(Optional.of(dealership));
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        User mappedUser = UserMapper.toUserEntity(userRequestDTO);
+        mappedUser.setDealership(dealership);
+        when(userRepository.save(any(User.class))).thenReturn(mappedUser);
 
         UserResponseDTO result = userService.saveUser(userRequestDTO);
 
@@ -129,6 +148,7 @@ public class UserServiceTest {
     @Test
     void testUpdateUser_Success() {
         when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(dealershipRepository.findById("dealership-id")).thenReturn(Optional.of(dealership));
         when(userRepository.save(any(User.class))).thenReturn(user);
         userRequestDTO.setName("Updated Name");
 
@@ -163,6 +183,7 @@ public class UserServiceTest {
     @Test
     void testUpdateUser_PartialUpdate() {
         when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(dealershipRepository.findById("dealership-id")).thenReturn(Optional.of(dealership));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         userRequestDTO.setName(null); // Simulate partial update with only email
@@ -186,7 +207,7 @@ public class UserServiceTest {
                 .build();
         when(userRepository.findAll()).thenReturn(List.of(user, anotherUser));
 
-        var users = userService.getUsers();
+        List<UserResponseDTO> users = userService.getUsers();
 
         assertNotNull(users);
         assertEquals(2, users.size());

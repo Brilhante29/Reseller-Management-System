@@ -29,4 +29,8 @@ public class UserRequestDTO {
 
     @NotNull(message = "Role is required")
     private Role role;
+
+    @NotNull(message = "dealershipId is required")
+    @NotBlank(message = "dealershipId is required")
+    private String dealershipId;
 }

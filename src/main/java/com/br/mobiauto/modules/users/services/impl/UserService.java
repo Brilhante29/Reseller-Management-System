@@ -2,11 +2,13 @@ package com.br.mobiauto.modules.users.services.impl;
 
 import com.br.mobiauto.exceptions.ConflictException;
 import com.br.mobiauto.exceptions.NotFoundException;
+import com.br.mobiauto.modules.dealerships.models.Dealership;
 import com.br.mobiauto.modules.users.dtos.UserRequestDTO;
 import com.br.mobiauto.modules.users.dtos.UserResponseDTO;
 import com.br.mobiauto.modules.users.models.User;
 import com.br.mobiauto.modules.users.models.enums.Role;
 import com.br.mobiauto.modules.users.mappers.UserMapper;
+import com.br.mobiauto.modules.dealerships.repositories.DealershipRepository;
 import com.br.mobiauto.modules.users.repositories.UserRepository;
 import com.br.mobiauto.modules.users.services.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final DealershipRepository dealershipRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -37,7 +40,11 @@ public class UserService implements IUserService {
             throw new ConflictException("Email is already in use");
         }
 
+        Dealership dealership = dealershipRepository.findById(userRequestDTO.getDealershipId())
+                .orElseThrow(() -> new NotFoundException("Dealership not found"));
+
         User user = UserMapper.toUserEntity(userRequestDTO);
+        user.setDealership(dealership);
         user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
 
         User savedUser = userRepository.save(user);
@@ -79,9 +86,15 @@ public class UserService implements IUserService {
                 .ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
         Optional.ofNullable(userRequestDTO.getRole()).ifPresent(user::setRole);
 
+        var dealership = dealershipRepository.findById(userRequestDTO.getDealershipId())
+                .orElseThrow(() -> new NotFoundException("Dealership not found"));
+
+        user.setDealership(dealership);
+
         User updatedUser = userRepository.save(user);
         return UserMapper.toUserResponseDTO(updatedUser);
     }
+
 
     @Override
     public void deleteUser(String email) {
