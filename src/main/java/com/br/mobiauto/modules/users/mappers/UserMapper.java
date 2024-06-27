@@ -4,21 +4,16 @@ import com.br.mobiauto.modules.users.dtos.UserRequestDTO;
 import com.br.mobiauto.modules.users.dtos.UserResponseDTO;
 import com.br.mobiauto.modules.users.models.User;
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
 
-@Component
 public class UserMapper {
-    private static ModelMapper modelMapper;
-
-    public UserMapper(ModelMapper modelMapper) {
-        UserMapper.modelMapper = modelMapper;
-    }
 
     public static UserResponseDTO toUserResponseDTO(User user) {
+        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(user, UserResponseDTO.class);
     }
 
     public static User toUserEntity(UserRequestDTO userRequestDTO) {
+        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(userRequestDTO, User.class);
     }
 }
