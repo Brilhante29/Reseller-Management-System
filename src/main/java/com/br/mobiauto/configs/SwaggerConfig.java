@@ -28,10 +28,34 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public GroupedOpenApi authApi() {
+        return GroupedOpenApi.builder()
+                .group("auth")
+                .pathsToMatch("/api/auth/**")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
                 .group("users")
                 .pathsToMatch("/api/users/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi dealershipsApi() {
+        return GroupedOpenApi.builder()
+                .group("dealerships")
+                .pathsToMatch("/api/dealerships/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi opportunitiesApi() {
+        return GroupedOpenApi.builder()
+                .group("opportunities")
+                .pathsToMatch("/api/opportunities/**")
                 .build();
     }
 }

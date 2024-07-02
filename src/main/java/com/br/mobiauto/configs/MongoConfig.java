@@ -38,4 +38,5 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     public Collection<String> getMappingBasePackages() {
         return Collections.singleton("com.br.mobiauto");
     }
+
 }

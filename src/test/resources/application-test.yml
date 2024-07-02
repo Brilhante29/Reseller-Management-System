@@ -7,7 +7,7 @@ spring:
     name: mobiauto
   data:
     mongodb:
-      uri: mongodb://root:secret@mongo:27017/mobiauto?authSource=admin
+      uri: mongodb://root:secret@mobiauto:27017/mobiauto?authSource=admin
   security:
     user:
       name: admin
