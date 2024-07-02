@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "cnpj": "12345678000190",
+    "corporateName": "Dealership One",
+    "users": [
+      {
+        "$ref": "users",
+        "$id": "1"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "cnpj": "09876543000121",
+    "corporateName": "Dealership Two",
+    "users": [
+      {
+        "$ref": "users",
+        "$id": "2"
+      }
+    ]
+  }
+]

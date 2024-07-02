@@ -1,0 +1,56 @@
+[
+  {
+    "id": "1",
+    "name": "Opportunity One",
+    "email": "client1@example.com",
+    "phone": "1234567890",
+    "brand": "BrandA",
+    "model": "ModelA",
+    "version": "VersionA",
+    "yearModel": 2022,
+    "status": "NEW",
+    "conclusionReason": null,
+    "assignedDate": "2023-07-01T10:00:00.000Z",
+    "conclusionDate": null,
+    "user": {
+      "$ref": "users",
+      "$id": "1"
+    }
+  },
+  {
+    "id": "2",
+    "name": "Opportunity Two",
+    "email": "client2@example.com",
+    "phone": "0987654321",
+    "brand": "BrandB",
+    "model": "ModelB",
+    "version": "VersionB",
+    "yearModel": 2021,
+    "status": "COMPLETED",
+    "conclusionReason": "Client bought elsewhere",
+    "assignedDate": "2023-06-15T14:00:00.000Z",
+    "conclusionDate": "2023-06-20T14:00:00.000Z",
+    "user": {
+      "$ref": "users",
+      "$id": "2"
+    }
+  },
+  {
+    "id": "3",
+    "name": "Opportunity Three",
+    "email": "client3@example.com",
+    "phone": "1122334455",
+    "brand": "BrandC",
+    "model": "ModelC",
+    "version": "VersionC",
+    "yearModel": 2023,
+    "status": "IN_PROGRESS",
+    "conclusionReason": null,
+    "assignedDate": "2023-07-10T11:00:00.000Z",
+    "conclusionDate": null,
+    "user": {
+      "$ref": "users",
+      "$id": "3"
+    }
+  }
+]

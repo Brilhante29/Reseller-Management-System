@@ -39,7 +39,10 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "spring.config.location=classpath:application-test.yml")
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
+        properties = "spring.config.location=classpath:application-test.yml"
+)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -79,17 +82,13 @@ public class AuthControllerTest {
                 .upsertDocuments(true)
                 .build();
 
-        Version.Main version = Version.Main.PRODUCTION;
-
         mongoDProcess = Mongod.builder()
                 .net(Start.to(Net.class).initializedWith(Net.defaults().withPort(27017)))
                 .build()
-                .transitions(version)
-                .walker()
-                .initState(StateID.of(RunningMongodProcess.class));
+                .start(Version.Main.V6_0);
 
         Transitions mongoImportTransitions = MongoImport.instance()
-                .transitions(version)
+                .transitions(Version.Main.V6_0)
                 .replace(Start.to(MongoImportArguments.class).initializedWith(arguments))
                 .addAll(Start.to(ServerAddress.class).initializedWith(mongoDProcess.current().getServerAddress()));
 
@@ -151,5 +150,31 @@ public class AuthControllerTest {
                         .header("Authorization", TestUtils.generateToken(String.valueOf(UUID.randomUUID()), "secret")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("jwtToken"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void registerUser_Error() throws Exception {
+        Mockito.when(authService.register(Mockito.any(RegisterRequestDTO.class))).thenThrow(new RuntimeException("User registration failed"));
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerRequestDTO))
+                        .header("Authorization", TestUtils.generateToken(String.valueOf(UUID.randomUUID()), "secret")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("User registration failed"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void loginUser_Error() throws Exception {
+        Mockito.when(authService.login(Mockito.any(AuthRequestDTO.class))).thenThrow(new RuntimeException("Invalid credentials"));
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authRequestDTO))
+                        .header("Authorization", TestUtils.generateToken(String.valueOf(UUID.randomUUID()), "secret")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Invalid credentials"));
     }
 }

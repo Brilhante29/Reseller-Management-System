@@ -4,7 +4,6 @@ import com.br.mobiauto.exceptions.ConflictException;
 import com.br.mobiauto.exceptions.NotFoundException;
 import com.br.mobiauto.modules.dealerships.dtos.DealershipRequestDTO;
 import com.br.mobiauto.modules.dealerships.dtos.DealershipResponseDTO;
-import com.br.mobiauto.modules.dealerships.mappers.DealershipMapper;
 import com.br.mobiauto.modules.dealerships.models.Dealership;
 import com.br.mobiauto.modules.dealerships.repositories.DealershipRepository;
 import org.junit.jupiter.api.BeforeEach;

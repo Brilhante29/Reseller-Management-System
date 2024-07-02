@@ -3,7 +3,6 @@ package com.br.mobiauto.modules.opportunities.services.impl;
 import com.br.mobiauto.exceptions.NotFoundException;
 import com.br.mobiauto.modules.opportunities.dtos.OpportunityRequestDTO;
 import com.br.mobiauto.modules.opportunities.dtos.OpportunityResponseDTO;
-import com.br.mobiauto.modules.opportunities.mappers.OpportunityMapper;
 import com.br.mobiauto.modules.opportunities.models.Opportunity;
 import com.br.mobiauto.modules.opportunities.models.enums.OpportunityStatus;
 import com.br.mobiauto.modules.opportunities.repositories.OpportunityRepository;
@@ -16,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
