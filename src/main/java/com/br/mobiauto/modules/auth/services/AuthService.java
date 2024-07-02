@@ -1,8 +1,6 @@
 package com.br.mobiauto.modules.auth.services;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.br.mobiauto.exceptions.ConflictException;
-import com.br.mobiauto.exceptions.NotFoundException;
 import com.br.mobiauto.modules.auth.dtos.AuthRequestDTO;
 import com.br.mobiauto.modules.auth.dtos.AuthResponseDTO;
 import com.br.mobiauto.modules.auth.dtos.RegisterRequestDTO;
@@ -10,8 +8,6 @@ import com.br.mobiauto.modules.users.dtos.UserRequestDTO;
 import com.br.mobiauto.modules.users.dtos.UserResponseDTO;
 import com.br.mobiauto.modules.users.mappers.UserMapper;
 import com.br.mobiauto.modules.users.models.User;
-import com.br.mobiauto.modules.users.models.enums.Role;
-import com.br.mobiauto.modules.users.repositories.UserRepository;
 import com.br.mobiauto.modules.users.services.IUserService;
 import com.br.mobiauto.security.providers.JWTProvider;
 import lombok.RequiredArgsConstructor;

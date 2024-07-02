@@ -71,7 +71,7 @@ public class UserServiceTest {
 
     @Test
     void testGetUserByEmail_UserExists() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.of(user));
 
         UserResponseDTO result = userService.getUserByEmail("john.doe@example.com");
 
@@ -82,14 +82,14 @@ public class UserServiceTest {
 
     @Test
     void testGetUserByEmail_UserNotFound() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(null);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userService.getUserByEmail("john.doe@example.com"));
     }
 
     @Test
     void testSaveUser_Success() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(null);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.empty());
         when(dealershipRepository.findById("dealership-id")).thenReturn(Optional.of(dealership));
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
 
@@ -106,14 +106,14 @@ public class UserServiceTest {
 
     @Test
     void testSaveUser_EmailConflict() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.of(user));
 
         assertThrows(ConflictException.class, () -> userService.saveUser(userRequestDTO));
     }
 
     @Test
     void testUpdateUserRole_Success() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.of(user));
         user.setRole(Role.MANAGER);
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -125,14 +125,14 @@ public class UserServiceTest {
 
     @Test
     void testUpdateUserRole_UserNotFound() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(null);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userService.updateUserRole("john.doe@example.com", Role.MANAGER));
     }
 
     @Test
     void testDeleteUser_Success() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.of(user));
         doNothing().when(userRepository).delete(user);
 
         assertDoesNotThrow(() -> userService.deleteUser("john.doe@example.com"));
@@ -140,14 +140,14 @@ public class UserServiceTest {
 
     @Test
     void testDeleteUser_UserNotFound() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(null);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userService.deleteUser("john.doe@example.com"));
     }
 
     @Test
     void testUpdateUser_Success() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.of(user));
         when(dealershipRepository.findById("dealership-id")).thenReturn(Optional.of(dealership));
         when(userRepository.save(any(User.class))).thenReturn(user);
         userRequestDTO.setName("Updated Name");
@@ -161,7 +161,7 @@ public class UserServiceTest {
 
     @Test
     void testUpdateUser_UserNotFound() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(null);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userService.updateUser("john.doe@example.com", userRequestDTO));
     }
@@ -172,8 +172,8 @@ public class UserServiceTest {
                 .id("2")
                 .email("new.email@example.com")
                 .build();
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
-        when(userRepository.findByEmail("new.email@example.com")).thenReturn(anotherUser);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail("new.email@example.com")).thenReturn(Optional.of(anotherUser));
 
         userRequestDTO.setEmail("new.email@example.com");
 
@@ -182,7 +182,7 @@ public class UserServiceTest {
 
     @Test
     void testUpdateUser_PartialUpdate() {
-        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.of(user));
         when(dealershipRepository.findById("dealership-id")).thenReturn(Optional.of(dealership));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -208,6 +208,26 @@ public class UserServiceTest {
         when(userRepository.findAll()).thenReturn(List.of(user, anotherUser));
 
         List<UserResponseDTO> users = userService.getUsers();
+
+        assertNotNull(users);
+        assertEquals(2, users.size());
+        assertEquals("John Doe", users.get(0).getName());
+        assertEquals("Jane Doe", users.get(1).getName());
+    }
+
+    @Test
+    void testGetUsersByDealership() {
+        User anotherUser = User.builder()
+                .id("2")
+                .name("Jane Doe")
+                .email("jane.doe@example.com")
+                .password("encodedPassword")
+                .role(Role.ASSISTANT)
+                .dealership(dealership)
+                .build();
+        when(userRepository.findAllByDealershipId("dealership-id")).thenReturn(List.of(user, anotherUser));
+
+        List<UserResponseDTO> users = userService.getUsersByDealership("dealership-id");
 
         assertNotNull(users);
         assertEquals(2, users.size());

@@ -11,6 +11,7 @@ public interface IUserService {
     UserResponseDTO saveUser(UserRequestDTO userRequestDTO);
     UserResponseDTO updateUser(String email, UserRequestDTO userRequestDTO);
     void deleteUser(String email);
+    List<UserResponseDTO> getUsersByDealership(String dealershipId);
     UserResponseDTO updateUserRole(String email, Role role);
     List<UserResponseDTO> getUsers();
 }

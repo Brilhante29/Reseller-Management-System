@@ -29,14 +29,14 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponseDTO getUserByEmail(String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email))
+        return userRepository.findByEmail(email)
                 .map(UserMapper::toUserResponseDTO)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
     public UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
-        if (userRepository.findByEmail(userRequestDTO.getEmail()) != null) {
+        if (userRepository.findByEmail(userRequestDTO.getEmail()).isPresent()) {
             throw new ConflictException("Email is already in use");
         }
 
@@ -53,10 +53,8 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponseDTO updateUserRole(String email, Role role) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new NotFoundException("User not found");
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
         user.setRole(role);
         User savedUser = userRepository.save(user);
         return UserMapper.toUserResponseDTO(savedUser);
@@ -71,10 +69,10 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponseDTO updateUser(String email, UserRequestDTO userRequestDTO) {
-        User user = Optional.ofNullable(userRepository.findByEmail(email))
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Optional.ofNullable(userRepository.findByEmail(userRequestDTO.getEmail()))
+        userRepository.findByEmail(userRequestDTO.getEmail())
                 .filter(existingUser -> !existingUser.getId().equals(user.getId()))
                 .ifPresent(existingUser -> {
                     throw new ConflictException("Email is already in use");
@@ -95,11 +93,17 @@ public class UserService implements IUserService {
         return UserMapper.toUserResponseDTO(updatedUser);
     }
 
-
     @Override
     public void deleteUser(String email) {
-        User user = Optional.ofNullable(userRepository.findByEmail(email))
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         userRepository.delete(user);
+    }
+
+    @Override
+    public List<UserResponseDTO> getUsersByDealership(String dealershipId) {
+        return userRepository.findAllByDealershipId(dealershipId).stream()
+                .map(UserMapper::toUserResponseDTO)
+                .collect(Collectors.toList());
     }
 }

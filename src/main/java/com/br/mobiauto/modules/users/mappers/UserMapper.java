@@ -5,6 +5,9 @@ import com.br.mobiauto.modules.users.dtos.UserResponseDTO;
 import com.br.mobiauto.modules.users.models.User;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class UserMapper {
 
     private static final ModelMapper modelMapper = new ModelMapper();

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ public class DealershipController {
 
     private final IDealershipService dealershipService;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     @Operation(summary = "Get all dealerships")
     @GetMapping
     public ResponseEntity<List<DealershipResponseDTO>> getAllDealerships() {
@@ -28,6 +30,7 @@ public class DealershipController {
         return new ResponseEntity<>(dealerships, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('OWNER')")
     @Operation(summary = "Get a dealership by ID")
     @GetMapping("/{id}")
     public ResponseEntity<DealershipResponseDTO> getDealershipById(@PathVariable String id) {
@@ -35,6 +38,7 @@ public class DealershipController {
         return new ResponseEntity<>(dealership, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new dealership")
     @PostMapping
     public ResponseEntity<DealershipResponseDTO> createDealership(
@@ -43,6 +47,7 @@ public class DealershipController {
         return new ResponseEntity<>(dealership, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update an existing dealership")
     @PutMapping("/{id}")
     public ResponseEntity<DealershipResponseDTO> updateDealership(
@@ -54,6 +59,7 @@ public class DealershipController {
         return new ResponseEntity<>(dealership, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete a dealership by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDealership(@PathVariable String id) {

@@ -57,14 +57,6 @@ public class AuthServiceTest {
                 .password("password123")
                 .build();
 
-        User user = User.builder()
-                .id("1")
-                .name("John Doe")
-                .email("john.doe@example.com")
-                .password("encodedPassword")
-                .role(Role.MANAGER)
-                .build();
-
         userResponseDTO = UserResponseDTO.builder()
                 .id("1")
                 .name("John Doe")

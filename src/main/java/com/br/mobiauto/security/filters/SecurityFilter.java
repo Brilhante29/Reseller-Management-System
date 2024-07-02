@@ -29,8 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
 
         // Check if the request is to a permitted URL
-        if (request.getRequestURI().startsWith("/api/users") ||
-                request.getRequestURI().startsWith("/api/auth")) {
+        if (request.getRequestURI().startsWith("/api/auth")) {
             filterChain.doFilter(request, response);
             return;
         }
