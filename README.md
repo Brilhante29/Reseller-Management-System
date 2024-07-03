@@ -1,5 +1,3 @@
-Claro, aqui está o `README.md` atualizado explicando como configurar e executar a aplicação com Docker Compose e MongoDB:
-
 # Mobiauto Backend Developer Interview
 
 ## Introdução
