@@ -1,4 +1,4 @@
-# Mobiauto Backend Developer Interview
+# Reseller management system
 
 ## Introdução
 
@@ -20,10 +20,6 @@ A aplicação tem como objetivo fornecer uma ferramenta de gestão de revendas d
 2. **DealershipController**: Gerencia operações relacionadas às revendas.
 3. **OpportunityController**: Gerencia operações relacionadas às oportunidades de negócio.
 4. **UserController**: Gerencia operações relacionadas aos usuários.
-
-### Diagrama de Arquitetura
-
-![Diagrama de Arquitetura](link-para-diagrama.png)
 
 ### Configuração e Variáveis de Ambiente
 
@@ -131,19 +127,7 @@ Para executar os testes, use o comando:
 mvn test
 ```
 
-## Suporte e Contato
-
-Para suporte, entre em contato através dos seguintes canais:
-
-- E-mail: suporte@mobiauto.com.br
-- Fórum: [Mobiauto Fórum](https://forum.mobiauto.com.br)
-- Chat: [Mobiauto Chat](https://chat.mobiauto.com.br)
-
 ## Problemas Comuns
 
 - **Conexão com MongoDB falhou**: Verifique se o MongoDB está em execução e as credenciais estão corretas.
 - **Token JWT inválido**: Certifique-se de que o token JWT está sendo gerado corretamente e que o segredo JWT é válido.
-
----
-
-Espero que esta documentação esteja de acordo com o que você precisa. Caso tenha mais alguma especificação ou ajuste, por favor, me avise.
