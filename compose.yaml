@@ -1,7 +1,5 @@
 version: '3.8'
 services:
-
-
   mongodb:
     image: 'mongo:latest'
     container_name: mongo
@@ -13,15 +11,17 @@ services:
       - '27017:27017'
     networks:
       - mobiauto-network
+
   app:
     container_name: app
     build: .
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:secret@mongo:27017/mobiauto?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb://root:secret@mongodb:27017/mobiauto?authSource=admin
     depends_on:
       - mongodb
+    restart: unless-stopped
     networks:
       - mobiauto-network
 networks:
